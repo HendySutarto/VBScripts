@@ -77,13 +77,18 @@ End Sub
 Sub CopyFileToTarget(objLogFile,  FileSourcePath , FileTargetPath , FileSourceName )
   Dim objFileCopy, objFSO
 
-  Set objFSO      = CreateObject("Scripting.FileSystemObject")
-  Set objFileCopy = objFSO.GetFile(FileSourcePath & "\" & FileSourceName)
-  objFileCopy.Copy (FileTargetPath & "\" & FileSourceName )
-  set objFSO = Nothing
-  set objFileCopy = Nothing
+  if FileSourcePath <> FileTargetPath then
+  
+    Set objFSO      = CreateObject("Scripting.FileSystemObject")
+    Set objFileCopy = objFSO.GetFile(FileSourcePath & "\" & FileSourceName)
+    objFileCopy.Copy (FileTargetPath & "\" & FileSourceName )
+    set objFSO = Nothing
+    set objFileCopy = Nothing
 
-  objLogFile.WriteLine("Copied to " &    FileTargetPath & "\" & FileSourceName )
+    objLogFile.WriteLine("Copied to " &    FileTargetPath & "\" & FileSourceName )
+  Else
+    objLogFile.WriteLine("Path Source and Path Target is the same: " &  FileTargetPath & "\" )
+  End if
 
 End Sub
 

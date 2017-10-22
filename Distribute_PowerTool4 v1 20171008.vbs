@@ -1,8 +1,9 @@
-' CopyFSO.vbs
-' Example VBScript for manipulating files.
-' Author Guy Thomas http://computerperformance.co.uk/
-' Version 3.4 - 4th July 2004
-' ----------------------------------------------------------
+'*********************************************************************************************************  
+' DISTRIBUTE A FILE ACROSS SEVERAL TARGET FOLDER
+'*********************************************************************************************************  
+
+
+
 Option Explicit
 
 Main
@@ -12,84 +13,91 @@ Main
 Sub Main()
 
 Dim objLogFile , objFSO
-Dim FileLogPath , FileLogName 
-    
-Dim FileSourcePath , FileSourceName, _
-    FileTargetPath , FileTargetName 
+Dim FileLogPath , FileLogName
 
+Dim FileSourcePath , FileSourceName, _
+    FileTargetPath , FileTargetName
+
+
+'*********************************************************************************************************  
+' INITIALISE LOG FILE
+'*********************************************************************************************************  
 
 
   FileLogPath = "C:\Users\Hendy\Desktop"
   FileLogName = "LogCopyOperation.txt"
 
-  FileSourcePath = "C:\MetaTrader4\T1_3_EURCAD\MQL4\Experts"
-  FileSourceName = "Powertool 4 (proty.2 build.2) - PMultiple - HiddenStopTarget - LongAndShort.mq4"
-  
-  FileTargetPath = "Z:"
-  FileTargetName = FileSourceName
-  
   Set objFSO      = CreateObject("Scripting.FileSystemObject")
   Set objLogFile = objFSO.CreateTextFile( FileLogPath & "\" & FileLogName , True)
-  objLogFile.WriteLine("Created Log File " & FileLogPath & "\" & FileLogName ) 
-  
-  
-  
-  
- 
-' Copy block here
+  objLogFile.WriteLine("Created Log File " & FileLogPath & "\" & FileLogName )
 
+
+'*********************************************************************************************************  
+' DETERMINE SOURCE PATH AND SOURCE NAME
+'*********************************************************************************************************  
+
+  FileSourcePath = "C:\MetaTrader4\MetaTrader 4 BigPic Tier 1\MQL4\Indicators"
+  FileSourceName = "MACDH_OnCalc.mq4"
+
+  ' Log the source path
   objLogFile.WriteLine("Source path: " & FileSourcePath )
- 
-  Call CopyFileToTarget(FileSourcePath , FileTargetPath , FileSourceName )
-  objLogFile.WriteLine("Copied to " & FileTargetPath & "\" & FileSourceName ) 
-    
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T1_1_GBPJPY\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T1_1_GBPJPY\MQL4\Experts" & "\" & FileSourceName ) 
-  
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T1_2_EURJPY\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T1_2_EURJPY\MQL4\Experts" & "\" & FileSourceName ) 
 
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T1_4_AUDJPY\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T1_4_AUDJPY\MQL4\Experts" & "\" & FileSourceName ) 
-  
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T2_1_EURUSD\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T2_1_EURUSD\MQL4\Experts" & "\" & FileSourceName ) 
 
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T2_2_GBPUSD\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T2_2_GBPUSD\MQL4\Experts" & "\" & FileSourceName ) 
+'*********************************************************************************************************  
+' PERFORM COPYING HERE
+'*********************************************************************************************************  
 
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T2_3_AUDUSD\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T2_3_AUDUSD\MQL4\Experts" & "\" & FileSourceName ) 
+' Copy block here - distribute to ALL FOLDERS 
   
-  Call CopyFileToTarget(FileSourcePath , "C:\MetaTrader4\T2_4_USDJPY\MQL4\Experts" , FileSourceName )
-  objLogFile.WriteLine("Copied to " &    "C:\MetaTrader4\T2_4_USDJPY\MQL4\Experts" & "\" & FileSourceName ) 
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\MetaTrader 4 BigPic Tier 1\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\MetaTrader 4 BigPic Tier 2\MQL4\Indicators" , FileSourceName )
 
- 
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T1_1_GBPJPY\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T1_2_EURJPY\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T1_3_EURCAD\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T1_4_AUDJPY\MQL4\Indicators" , FileSourceName )
   
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T2_1_EURUSD\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T2_2_GBPUSD\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T2_3_AUDUSD\MQL4\Indicators" , FileSourceName )
+  Call CopyFileToTarget(objLogFile, FileSourcePath , "C:\MetaTrader4\T2_4_USDJPY\MQL4\Indicators" , FileSourceName )
+
+
+
+'*********************************************************************************************************  
+' CLOSE LOG FILE, OPEN LOG FILE, AND QUIT THE SCRIPT
+'*********************************************************************************************************  
   
 ' Finalisation and closing block here
-  
-  objLogFile.Close  
-
-  Call OpenLogFile( FileLogPath & "\" & FileLogName )    
+  objLogFile.Close
+  Call OpenLogFile( FileLogPath & "\" & FileLogName )
   Wscript.Quit
 
 End Sub
 
 
-Sub CopyFileToTarget(FileSourcePath , FileTargetPath , FileSourceName )
+Sub CopyFileToTarget(objLogFile,  FileSourcePath , FileTargetPath , FileSourceName )
   Dim objFileCopy, objFSO
-  Set objFSO      = CreateObject("Scripting.FileSystemObject")
-  Set objFileCopy = objFSO.GetFile(FileSourcePath & "\" & FileSourceName)  
-  objFileCopy.Copy (FileTargetPath & "\" & FileSourceName )    
-  set objFSO = Nothing
-  set objFileCopy = Nothing
+
+  if FileSourcePath <> FileTargetPath then
+  
+    Set objFSO      = CreateObject("Scripting.FileSystemObject")
+    Set objFileCopy = objFSO.GetFile(FileSourcePath & "\" & FileSourceName)
+    objFileCopy.Copy (FileTargetPath & "\" & FileSourceName )
+    set objFSO = Nothing
+    set objFileCopy = Nothing
+
+    objLogFile.WriteLine("Copied to " &    FileTargetPath & "\" & FileSourceName )
+  Else
+    objLogFile.WriteLine("Path Source and Path Target is the same: " &  FileTargetPath & "\" )
+  End if    
+
 End Sub
 
 
 Sub OpenLogFile( strFPathAndName )
-  Dim oShell 
+  Dim oShell
   Set oShell = WScript.CreateObject("WScript.Shell")
   oShell.run "Notepad.exe " & strFPathAndName
-  Set oShell = Nothing 
+  Set oShell = Nothing
 End Sub
